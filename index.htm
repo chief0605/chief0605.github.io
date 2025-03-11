@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>圖片點擊放大</title>
+    <title>圖片超連結</title>
     <style>
         /* 小圖片樣式 */
         .thumbnail {
-            width: 2400px; /* 設置小圖片的大小 */
+            width: 240px; /* 設置小圖片的大小 */
             cursor: pointer;
-            transition: transform 3s ease; /* 當懸停時有動畫效果 */
+            transition: transform 0.3s ease; /* 當懸停時有動畫效果 */
         }
 
         /* 模態框樣式，用來顯示放大後的圖片 */
@@ -35,8 +35,11 @@
 </head>
 <body>
 
-    <!-- 顯示的小圖片，點擊後會顯示放大的圖片 -->
-    <img src="2.jpg.png" alt="小圖片" class="thumbnail" onclick="openModal(this)">
+    <!-- 包裹圖片的超連結，點擊圖片會跳轉到 YouTube 影片 -->
+    <a href="https://youtu.be/xvFZjo5PgG0?si=NfF01ldL26cAwAVH" target="_blank">
+        <!-- 顯示的小圖片，點擊後會顯示放大的圖片 -->
+        <img src="2.jpg.png" alt="小圖片" class="thumbnail" onclick="openModal(this)">
+    </a>
 
     <!-- 放大圖片的模態框 -->
     <div class="modal" id="myModal" onclick="closeModal()">
