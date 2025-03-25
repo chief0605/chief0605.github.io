@@ -20,9 +20,9 @@ username = "12111382"  # 這是你提供的帳號
 # 設定密碼的可能組合（每次錯誤後會自動換下一組密碼）
 passwords = ['password1', 'password2', 'password3', 'password4', 'password5']  # 可以在這裡填入更多密碼組合
 
-# 假設網站的帳號欄位是 'username'，密碼欄位是 'password'
-username_field = driver.find_element(By.NAME, "username")  # 假設 name 為 'username'
-password_field = driver.find_element(By.NAME, "password")  # 假設 name 為 'password'
+# 假設網站的帳號欄位名稱是 '學號或人事代碼'，密碼欄位名稱是 'password'
+username_field = driver.find_element(By.NAME, "學號或人事代碼")  # 這是帳號欄位的名稱
+password_field = driver.find_element(By.NAME, "密碼")  # 假設密碼欄位名稱為 'password'，根據實際情況調整
 
 # 模擬登入過程，每次換密碼
 for password in passwords:
