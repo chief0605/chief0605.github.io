@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snake Game</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+    }
+    canvas {
+      background: #222;
+      display: block;
+      margin: 20px auto;
+      border: 2px solid #fff;
+    }
+    #scoreboard {
+      margin-top: 10px;
+    }
+    #highscores {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐍 Snake Game</h1>
+  <div id="scoreboard">
+    Score: <span id="score">0</span>
+  </div>
+  <canvas id="game" width="400" height="400"></canvas>
+  <div id="highscores">
+    <h3>🏆 High Scores</h3>
+    <ol id="scoreList"></ol>
+  </div>
+
+  <audio id="eatSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8e247f1d94.mp3?filename=notification-112698.mp3"></audio>
+  <audio id="gameOverSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5f92f8413e.mp3?filename=game-over-arcade-6435.mp3"></audio>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score');
+    const scoreList = document.getElementById('scoreList');
+    const eatSound = document.getElementById('eatSound');
+    const gameOverSound = document.getElementById('gameOverSound');
+
+    const gridSize = 20;
+    let snake = [{ x: 160, y: 200 }];
+    let direction = { x: gridSize, y: 0 };
+    let food = randomFood();
+    let score = 0;
+    let speed = 150;
+    let gameInterval;
+
+    function drawRect(x, y, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, gridSize, gridSize);
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawRect(food.x, food.y, 'red');
+      snake.forEach((segment, index) => {
+        drawRect(segment.x, segment.y, index === 0 ? 'lime' : 'green');
+      });
+    }
+
+    function update() {
+      const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+
+      if (
+        head.x < 0 || head.y < 0 ||
+        head.x >= canvas.width || head.y >= canvas.height ||
+        snake.some(segment => segment.x === head.x && segment.y === head.y)
+      ) {
+        gameOverSound.play();
+        alert('Game Over!');
+        saveHighScore(score);
+        reset();
+        return;
+      }
+
+      snake.unshift(head);
+      if (head.x === food.x && head.y === food.y) {
+        score++;
+        scoreEl.textContent = score;
+        eatSound.play();
+        food = randomFood();
+        if (speed > 50) {
+          speed -= 5;
+          clearInterval(gameInterval);
+          gameInterval = setInterval(gameLoop, speed);
+        }
+      } else {
+        snake.pop();
+      }
+
+      draw();
+    }
+
+    function gameLoop() {
+      update();
+    }
+
+    function reset() {
+      snake = [{ x: 160, y: 200 }];
+      direction = { x: gridSize, y: 0 };
+      food = randomFood();
+      score = 0;
+      scoreEl.textContent = score;
+      speed = 150;
+      clearInterval(gameInterval);
+      gameInterval = setInterval(gameLoop, speed);
+      draw();
+      updateScoreBoard();
+    }
+
+    function randomFood() {
+      const x = Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
+      const y = Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize;
+      return { x, y };
+    }
+
+    function saveHighScore(score) {
+      let scores = JSON.parse(localStorage.getItem('snakeHighScores') || '[]');
+      scores.push(score);
+      scores = scores.sort((a, b) => b - a).slice(0, 5);
+      localStorage.setItem('snakeHighScores', JSON.stringify(scores));
+    }
+
+    function updateScoreBoard() {
+      const scores = JSON.parse(localStorage.getItem('snakeHighScores') || '[]');
+      scoreList.innerHTML = '';
+      scores.forEach(score => {
+        const li = document.createElement('li');
+        li.textContent = score;
+        scoreList.appendChild(li);
+      });
+    }
+
+    document.addEventListener('keydown', e => {
+      switch (e.key) {
+        case 'ArrowUp': if (direction.y === 0) direction = { x: 0, y: -gridSize }; break;
+        case 'ArrowDown': if (direction.y === 0) direction = { x: 0, y: gridSize }; break;
+        case 'ArrowLeft': if (direction.x === 0) direction = { x: -gridSize, y: 0 }; break;
+        case 'ArrowRight': if (direction.x === 0) direction = { x: gridSize, y: 0 }; break;
+      }
+    });
+
+    reset();
+  </script>
+</body>
+</html>
