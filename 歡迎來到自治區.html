@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title> 歡迎您來到 灰塵的自治區</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 20%;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="welcome-message"></div>
+
+  <script>
+    const userId = "U1243000";
+    const messageContainer = document.getElementById("welcome-message");
+
+    if (localStorage.getItem("hasVisited")) {
+      messageContainer.textContent = `歡迎回來, ${userId}`;
+    } else {
+      messageContainer.textContent = `Hi ${userId}`;
+      localStorage.setItem("hasVisited", "true");
+    }
+  </script>
+
+</body>
+</html>
