@@ -24,11 +24,11 @@
   <div id="welcome-message"></div>
 
   <script>
-    const userId = "U1243025";
+    const userId = "你好啊!U1243046";
     const messageContainer = document.getElementById("welcome-message");
 
     if (localStorage.getItem(`hasVisited_${userId}`)) {
-      messageContainer.textContent = `歡迎回來, ${userId}`;
+      messageContainer.textContent = `今天也很開心喔, ${userId}`;
     } else {
       messageContainer.textContent = `Hi ${userId}`;
       localStorage.setItem(`hasVisited_${userId}`, "true");
