@@ -2,13 +2,20 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title> 歡迎您來到 灰塵的自治區</title>
+  <title>歡迎來到灰塵的自治區</title>
   <style>
     body {
-      font-family: sans-serif;
-      text-align: center;
-      margin-top: 20%;
+      font-family: "Microsoft JhengHei", sans-serif;
       font-size: 24px;
+      margin: 0;
+      padding: 20px;
+    }
+
+    #welcome-message {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 20px;
     }
   </style>
 </head>
@@ -17,14 +24,14 @@
   <div id="welcome-message"></div>
 
   <script>
-    const userId = "U1243000";
+    const userId = "U1243025";
     const messageContainer = document.getElementById("welcome-message");
 
-    if (localStorage.getItem("hasVisited")) {
+    if (localStorage.getItem(`hasVisited_${userId}`)) {
       messageContainer.textContent = `歡迎回來, ${userId}`;
     } else {
       messageContainer.textContent = `Hi ${userId}`;
-      localStorage.setItem("hasVisited", "true");
+      localStorage.setItem(`hasVisited_${userId}`, "true");
     }
   </script>
 
